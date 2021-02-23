@@ -1,0 +1,2 @@
+sanic~=20.9.1
+aiosqlite~=0.16.0
