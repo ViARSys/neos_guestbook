@@ -9,7 +9,7 @@ from sanic.response import json, text
 
 import database as db
 
-from config import CONFIG
+from .config import CONFIG
 
 app = Sanic(name="neos_guestbook")
 
@@ -29,8 +29,14 @@ async def new(request: Request):
     return text("OK")
 
 
-@app.route(f"{CONFIG.BASEURL}/neos/messages/")
-async def getMessages(request: Request):
+@app.route(f"{CONFIG.BASEURL}/json/messages")
+async def json_get_messages(request: Request):
+    notes = await db.getMessagesByWorld(request.arg["world"][0])
+    return json(notes.as_dict)
+
+
+@app.route(f"{CONFIG.BASEURL}/neos/messages")
+async def neos_get_messages(request: Request):
     notes = await db.getMessagesByWorld(request.args["world"][0])
     notes = [(note.user, note.message) for note in notes]
     return text(format_for_notes(notes))

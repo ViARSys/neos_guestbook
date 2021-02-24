@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Tuple
+from typing import Tuple, Dict
 from urllib import parse
 
 
@@ -23,6 +23,15 @@ class Message:
     @property
     def as_tuple(self) -> Tuple:
         return (int(self.timestamp.timestamp()), self.world, self.message, self.user)
+
+    @property
+    def as_json(self) -> Dict:
+        return {
+            "timestamp": int(self.timestamp.fromtimestamp()),
+            "world": self.world,
+            "message": self.message,
+            "user": self.user,
+        }
 
     @classmethod
     def from_row(cls, data):
