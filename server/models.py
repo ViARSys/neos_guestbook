@@ -14,7 +14,7 @@ class Message:
     @classmethod
     def from_new(cls, data: dict):
         return cls(
-            datetime.now(),
+            int(datetime.now()),
             parse.unquote(data["world"]),
             parse.unquote(data["message"]),
             parse.unquote(data["user"]),
@@ -25,9 +25,9 @@ class Message:
         return (int(self.timestamp.timestamp()), self.world, self.message, self.user)
 
     @property
-    def as_json(self) -> Dict:
+    def as_dict(self) -> Dict:
         return {
-            "timestamp": int(self.timestamp.fromtimestamp()),
+            "timestamp": int(self.timestamp.timestamp()),
             "world": self.world,
             "message": self.message,
             "user": self.user,
