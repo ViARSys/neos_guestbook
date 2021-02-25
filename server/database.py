@@ -15,7 +15,9 @@ async def saveMessage(message: Message) -> None:
 
 
 async def getMessagesByWorld(world: str) -> List[Message]:
-    res = await session.execute("SELECT timestamp, world, message, user from messages WHERE world=?", (world,))
+    res = await session.execute(
+        "SELECT timestamp, world, message, user from messages WHERE world=? ORDER BY timestamp DESC", (world,)
+    )
     return [Message.from_row(data) for data in await res.fetchall()]
 
 
