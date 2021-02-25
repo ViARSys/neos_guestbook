@@ -4,21 +4,27 @@ import aiosqlite
 from models import Message
 
 
+session: aiosqlite.Connection = None
+
+
 async def saveMessage(message: Message) -> None:
-    async with aiosqlite.connect(CONFIG.DATABASE) as session:
-        await session.execute(
-            "INSERT INTO messages (timestamp, world, message, user) VALUES (?, ?, ?, ?)", message.as_tuple
-        )
-        await session.commit()
+    await session.execute(
+        "INSERT INTO messages (timestamp, world, message, user) VALUES (?, ?, ?, ?)", message.as_tuple
+    )
+    await session.commit()
 
 
 async def getMessagesByWorld(world: str) -> List[Message]:
-    async with aiosqlite.connect(CONFIG.DATABASE) as session:
-        res = await session.execute("SELECT timestamp, world, message, user from messages WHERE world=?", (world,))
+    res = await session.execute("SELECT timestamp, world, message, user from messages WHERE world=?", (world,))
+    return [Message.from_row(data) for data in await res.fetchall()]
 
-        return [Message.from_row(data) for data in await res.fetchall()]
+
+async def getListOfWorlds() -> List[str]:
+    res = await session.execute("SELECT DISTINCT world from messages")
+    return [each[0] for each in await res.fetchall()]
 
 
 async def setup():
-    async with aiosqlite.connect(CONFIG.DATABASE) as session:
-        await session.executescript(open("schema.sql").read())
+    global session
+    session = await aiosqlite.connect(CONFIG.DATABASE)
+    await session.executescript(open("schema.sql").read())

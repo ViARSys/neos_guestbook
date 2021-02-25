@@ -8,8 +8,9 @@ from sanic.request import Request
 from sanic.response import json, text
 
 import database as db
+import neos
 
-from .config import CONFIG
+from config import CONFIG
 
 app = Sanic(name="neos_guestbook")
 
@@ -24,6 +25,8 @@ def format_for_notes(data: Iterable[Iterable]) -> str:
 
 @app.route(f"{CONFIG.BASEURL}/new", methods=["POST"])
 async def new(request: Request):
+    if not await neos.validate_username(request.json["user"]):
+        return text("BAD", status=400)
     message = Message.from_new(request.json)
     await db.saveMessage(message)
     return text("OK")
@@ -40,6 +43,12 @@ async def neos_get_messages(request: Request):
     notes = await db.getMessagesByWorld(request.args["world"][0])
     notes = [(note.user, note.message) for note in notes]
     return text(format_for_notes(notes))
+
+
+@app.route(f"{CONFIG.BASEURL}/worlds")
+async def json_get_all_worlds(request: Request):
+    worlds = await db.getListOfWorlds()
+    return json(worlds)
 
 
 @app.listener("after_server_start")
