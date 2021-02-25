@@ -14,7 +14,7 @@ class Message:
     @classmethod
     def from_new(cls, data: dict):
         return cls(
-            int(datetime.now()),
+            datetime.fromtimestamp(int(datetime.now().timestamp())),
             parse.unquote(data["world"]),
             parse.unquote(data["message"]),
             parse.unquote(data["user"]),

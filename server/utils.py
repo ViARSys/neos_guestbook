@@ -4,8 +4,8 @@ import hashlib
 
 async def validate_username(username: str) -> bool:
     async with aiohttp.ClientSession() as session:
-        res = await session.get(f"https://neosvr-api.com/api/users/{username}")
-        return res.ok()
+        res = await session.get(f"https://www.neosvr-api.com/api/users/{username}")
+        return res.ok
 
 
 def hash_password(salt, password):
