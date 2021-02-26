@@ -8,8 +8,8 @@ from urllib import parse
 class Message:
     timestamp: datetime
     world: str
-    message: str
     user: str
+    message: str
 
     @classmethod
     def from_new(cls, data: dict):
@@ -36,7 +36,7 @@ class Message:
     @classmethod
     def from_row(cls, data):
         return cls(
-            datetime.fromtimestamp(data[0]),
+            datetime.fromtimestamp(float(data[0])),
             data[1],
             data[2],
             data[3],

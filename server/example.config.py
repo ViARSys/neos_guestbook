@@ -13,3 +13,10 @@ class CONFIG:
         # etc
         # you can specify a static hash here instead of typing a password in
     }
+
+    SPREADSHEET = "1gxm0xk7OHL5Sj9bsQSUEek_38Y-XIK-OX_MYTrg1Y0E"
+
+    GOOGLE_AUTH_OBJECT = {
+        "type": "service_account",
+        # etc
+    }

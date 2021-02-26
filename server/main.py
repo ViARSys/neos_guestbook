@@ -9,13 +9,14 @@ from sanic.response import json, text
 from sanic_httpauth import HTTPBasicAuth
 
 
-import database as db
+from database import GoogleSpreadsheet
 import utils
 
 from config import CONFIG
 
 app = Sanic(name="neos_guestbook")
 auth = HTTPBasicAuth()
+db = GoogleSpreadsheet()
 
 
 @auth.verify_password
@@ -67,7 +68,7 @@ async def delete_message(request: Request, mid: int):
 
 
 @app.listener("after_server_start")
-async def startup(app, loop):
+async def startup(sanic_app, loop):
     await db.setup()
 
 
