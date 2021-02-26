@@ -14,7 +14,7 @@ class Message:
     @classmethod
     def from_new(cls, data: dict):
         return cls(
-            datetime.fromtimestamp(int(datetime.now().timestamp())),
+            datetime.now(),
             parse.unquote(data["world"]),
             parse.unquote(data["message"]),
             parse.unquote(data["user"]),
@@ -27,7 +27,7 @@ class Message:
     @property
     def as_dict(self) -> Dict:
         return {
-            "timestamp": int(self.timestamp.timestamp()),
+            "timestamp": self.timestamp.timestamp(),
             "world": self.world,
             "message": self.message,
             "user": self.user,
