@@ -38,6 +38,6 @@ class Message:
         return cls(
             datetime.fromtimestamp(float(data[0])),
             data[1],
-            data[2],
             data[3],
+            data[2],
         )
